@@ -1,2 +1,3 @@
-# dsdt-ssdt-asus-rog-gl552vw
-Patching DSDT/SSDT on Asus ROG GL552VW
+# Patching DSDT/SSDT on Asus ROG GL552VW
+
+Applying various patches to DSDT/SSDT on Asus ROG GL552VW for my hackintosh.
