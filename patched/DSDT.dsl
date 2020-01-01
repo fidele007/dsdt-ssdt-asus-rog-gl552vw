@@ -37964,19 +37964,21 @@ Else
     {
         Device (ETPD)
         {
+            Name (SBFG, ResourceTemplate ()
+            {
+                GpioInt (Level, ActiveLow, ExclusiveAndWake, PullDefault, 0x0000,
+                    "\\_SB.PCI0.GPI0", 0x00, ResourceConsumer, ,
+                    )
+                    {   // Pin list
+                        0x0047
+                    }
+            })
             Name (SBFB, ResourceTemplate ()
             {
                 I2cSerialBusV2 (0x004C, ControllerInitiated, 0x00061A80,
                     AddressingMode7Bit, "\\_SB.PCI0.I2C1",
                     0x00, ResourceConsumer, _Y34, Exclusive,
                     )
-            })
-            Name (SBFI, ResourceTemplate ()
-            {
-                Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive, ,, )
-                {
-                    0x0000005F,
-                }
             })
             CreateWordField (SBFB, \_SB.PCI0.I2C1.ETPD._Y34._ADR, BADR)  // _ADR: Address
             Name (_ADR, One)  // _ADR: Address
@@ -38059,7 +38061,7 @@ Else
 
             Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
             {
-                Return (ConcatenateResTemplate (SBFB, SBFI))
+                Return (ConcatenateResTemplate (SBFB, SBFG))
             }
         }
     }
