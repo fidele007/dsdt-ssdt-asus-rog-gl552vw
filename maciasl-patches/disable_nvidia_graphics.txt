@@ -9,7 +9,7 @@ into definitionblock code_regex External\s*\(_SB_.PCI0.PEG0.PEGP._ON,\s*MethodOb
 into definitionblock code_regex External\s*\(_SB_.PCI0.PEG0.PEGP.SGOF,\s*MethodObj\) removeall_matched;
 into definitionblock code_regex External\s*\(_SB_.PCI0.PEG0.PEGP.SGON,\s*MethodObj\) removeall_matched;
 
-into method M_OF remove_entry;
+into method label M_OF parent_type definitionblock remove_entry;
 
 into method label _WAK parent_type definitionblock code_regex M_OF\s*\(\) removeall_matched;
 into method label _INI parent_label _SB.PCI0 code_regex M_OF\s*\(\) removeall_matched;
@@ -17,7 +17,7 @@ into method label _INI parent_label _SB.PCI0 code_regex M_OF\s*\(\) removeall_ma
 # Insert external methods
 into definitionblock code_regex . insert
 begin
-	// External methods for disabling NVIDIA card
+	// External methods for disabling NVIDIA card\n
 	External (_SB_.PCI0.PEG0.PEGP._PS3, MethodObj)\n
 	External (_SB_.PCI0.PEG0.PEGP._PS0, MethodObj)\n
 	External (_SB_.PCI0.PEG0.PEGP._OFF, MethodObj)\n
