@@ -1,0 +1,25 @@
+# GPIO patching for ASUS ROG GL552VW
+# Maintained by: fidele007
+
+# Remove SBFI named object
+into device label ETPD parent_label _SB.PCI0.I2C1 code_regex Name\s*\(SBFI.*\s*\{\s*.*\s*\{\s*.*\s*\}\s*\}\) remove_matched;
+
+# Remove any existing SBFG named object
+into device label ETPD parent_label _SB.PCI0.I2C1 code_regex Name\s*\(SBFG.*\s*\{\s*.*\s*\{\s*.*\s*\}\s*\}\) remove_matched;
+
+# Insert SBFG ResourceTemplate
+into device label ETPD parent_label _SB.PCI0.I2C1 insert begin
+			Name (SBFG, ResourceTemplate ()\n
+			{\n
+				GpioInt (Level, ActiveLow, ExclusiveAndWake, PullDefault, 0x0000,\n
+					"\\_SB.PCI0.GPI0", 0x00, ResourceConsumer, ,\n
+					)\n
+					{\n
+						// Pin list\n
+						0x0047\n
+					}\n
+			})\n
+end;
+
+# Replace all calls to SBFI in the scope _SB.PCI0.I2C1 to SBFG
+into method label _CRS parent_label ETPD code_regex SBFI replaceall_matched begin SBFG end;
