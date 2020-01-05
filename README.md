@@ -14,3 +14,7 @@ rm iasl iasl.zip
 # Run iasl on the ACPI files
 iasl -da -dl -fe refs.txt DSDT.aml SSDT*.aml
 ```
+
+## MaciASL patches
+
+The patches in this repo can be added to MaciASL in its Preferences: https://raw.github.com/fidele007/dsdt-ssdt-asus-rog-gl552vw/master/maciasl-patches
