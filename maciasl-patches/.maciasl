@@ -1,2 +1,2 @@
-[VoodooI2C] GPIO Patch	disable_nvidia_graphics.txt
-Disable NVIDIA graphics	voodooi2c_gpio_patch.txt
+[VoodooI2C] GPIO Patch	voodooi2c_gpio_patch.txt
+Disable NVIDIA graphics	disable_nvidia_graphics.txt
