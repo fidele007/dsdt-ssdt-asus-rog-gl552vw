@@ -1,0 +1,53 @@
+# Disable NVIDIA graphics for ASUS ROG GL552VW
+# Maintained by: fidele007
+
+# Remove existing patches if there is any
+into definitionblock code_regex External\s*\(_SB_.PCI0.PEG0.PEGP._PS3,\s*MethodObj\) removeall_matched;
+into definitionblock code_regex External\s*\(_SB_.PCI0.PEG0.PEGP._PS0,\s*MethodObj\) removeall_matched;
+into definitionblock code_regex External\s*\(_SB_.PCI0.PEG0.PEGP._OFF,\s*MethodObj\) removeall_matched;
+into definitionblock code_regex External\s*\(_SB_.PCI0.PEG0.PEGP._ON,\s*MethodObj\) removeall_matched;
+into definitionblock code_regex External\s*\(_SB_.PCI0.PEG0.PEGP.SGOF,\s*MethodObj\) removeall_matched;
+into definitionblock code_regex External\s*\(_SB_.PCI0.PEG0.PEGP.SGON,\s*MethodObj\) removeall_matched;
+
+into method M_OF remove_entry;
+
+into method label _WAK parent_type definitionblock code_regex M_OF\s*\(\) removeall_matched;
+into method label _INI parent_label _SB.PCI0 code_regex M_OF\s*\(\) removeall_matched;
+
+# Insert external methods
+into definitionblock code_regex . insert
+begin
+	// External methods for disabling NVIDIA card
+	External (_SB_.PCI0.PEG0.PEGP._PS3, MethodObj)\n
+	External (_SB_.PCI0.PEG0.PEGP._PS0, MethodObj)\n
+	External (_SB_.PCI0.PEG0.PEGP._OFF, MethodObj)\n
+	External (_SB_.PCI0.PEG0.PEGP._ON, MethodObj)\n
+	External (_SB_.PCI0.PEG0.PEGP.SGOF, MethodObj)\n
+	External (_SB_.PCI0.PEG0.PEGP.SGON, MethodObj)\n
+end;
+
+# Insert method M_OF in the definition block
+into definitionblock code_regex . insert
+begin
+	Method (M_OF, 0, NotSerialized)\n
+	{\n
+			If (CondRefOf(\_SB_.PCI0.PEG0.PEGP._OFF))\n
+			{\n
+				\_SB_.PCI0.PEG0.PEGP._OFF()\n
+			}\n
+			If (CondRefOf(\_SB_.PCI0.PEG0.PEGP._PS3))\n
+			{\n
+				\_SB_.PCI0.PEG0.PEGP._PS3()\n
+			}\n
+			If (CondRefOf(\_SB_.PCI0.PEG0.PEGP.SGOF))\n
+			{\n
+				\_SB_.PCI0.PEG0.PEGP.SGOF()\n
+			}\n
+	}\n
+end;
+
+# Insert method M_OF at the beginning of the method _WAK
+into method label _WAK parent_type definitionblock code_regex \s* replace_matched begin M_OF ()\n\t\t end;
+
+# Insert method M_OF in the method _INI
+into method label _INI parent_label _SB.PCI0 code_regex If replace_matched begin M_OF ()\n\t\t\tIf end;
